@@ -27,7 +27,7 @@ class DoublyLinkedList {
 
     printAll() {
         let currentNode = this.head;
-        let text = this.count +" [";
+        let text = this.count +"[";
         while(currentNode != null) {
             text += currentNode.data;
             currentNode = currentNode.next;

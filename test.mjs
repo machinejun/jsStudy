@@ -22,6 +22,6 @@ hashSet.remove(9)
 console.log("9 : " + hashSet.isContain(9));
 
 hashSet.clear();
-console.log("clear : " + hashSet.isEmpty());
+console.log("clear : " + hashSet.isEmpty(s));
 hashSet.printAll();
 
