@@ -25,3 +25,5 @@ hashSet.clear();
 console.log("clear : " + hashSet.isEmpty(s));
 hashSet.printAll();
 
+console.log("test");
+
