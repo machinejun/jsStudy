@@ -50,6 +50,80 @@ class BinarySearchTree {
 
         return null;
     }
+
+	remove(targetData) {
+		let fakeParentNode = new BinaryTree(0); 
+		//루트 노드를 제거할 때 사용
+		// why ? 루트노드는 다른 노드와 다르게 부모 노드를 가지고 있지 않음
+
+		let parentNode = fakeParentNode; //루트노드부터 시작한다
+		let currentNode = this._root;
+		let deleteNode = null;
+
+		fakeParentNode.setRightSubTree(this._root);
+
+		while(currentNode != null && currentNode.getData() != targetData) {
+			parentNode = currentNode;
+			if(currentNode.getDatat() > targetData) {
+				currentNode = currentNode.getLeftSubTree();
+			}else {
+				currentNode = currentNode.getRightSubTree();
+			}
+		}
+
+		if(currentNode == null) return; // 데이터를 찾지 못하였을 때
+
+		deleteNode = currentNode;
+
+		if(deleteNode.getLeftSubTree() == null && deleteNode.getRightSubTree() == null) { //1. 자식노드가 하나도 없는 터미널 노드일 때
+			if(parentNode.getLeftSubTree() == deleteNode) parentNode.removeLeftSubTree();
+			else parentNode.removeRightSubTree();
+		}
+		else if(deleteNode.getLeftSubTree() == null || deleteNode.getRightSubTree() == null) { //2. 자식 노드가 하나인 노드 제거
+			let deleteNodeChild = null;
+
+			if(deleteNode.getLeftSubTree() != null) {
+				deleteNodeChild = deleteNode.getLeftSubTree();
+			}else {
+				deleteNodeChild = deleteNode.getRightSubTree();
+			}
+
+			if(parentNode.getLeftSubTree() == deleteNode) parentNode.setLeftSubTree(deleteNodeChild);
+			else parentNode.setRightSubTree(deleteNodeChild);
+		
+		}
+		//3. 자식 노드가 두개인 노드 제거 
+		else {
+			let replaceNode = deleteNode.getLeftSubTree();
+			let replaceParent = deleteNode;
+
+
+			while(replaceNode.getRightSubTree() != null) { // 왼쪽 자식 트리중 가장 큰 값을 가진 노드 찾기
+				replaceParent = replaceNode;
+				replaceNode = replaceNode.getRightSubTree();
+			}
+
+			let deleteNodeData = deleteNode.getData();
+			deleteNodeData.setData(replaceNode.getData());
+
+			if(replaceParent.getLeftSubTree() == replaceNode){ // 우리는 오른쪽 자식 노드가 없다는 것을 알고 있기 때문에 왼쪽 자식만 신경쓰면 된다.
+				replaceParent.setLeftSubTree(replaceNode.getLeftSubTree());
+			}else {
+				replaceParent.setRightSubTree(replaceNode.getLeftSubTree());
+			}
+
+			deleteNode = replaceNode;
+			deleteNode.setData(deleteNodeData);
+		
+		}
+
+		if(fakeParentNode.getRightSubTree() != this.root) {
+			this.root = fakeParentNode.getRightSubTree();
+		}
+
+		return deleteNode;
+
+	}
 }
 
 let bsTree = new BinarySearchTree();

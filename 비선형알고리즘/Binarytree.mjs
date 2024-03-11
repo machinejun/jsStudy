@@ -71,6 +71,17 @@ class BinaryTree {
         console.log(tree.getData());
     }
 
+	removeLeftSubTree() {
+		let deleteNode = this.getLeftSubTree();
+		this.setLeftSubTree(null);
+		return deleteNode;
+	}
+
+	removeRightSubTree() {
+		let deleteNode = this.getRightSubTree();
+		this.setRightSubTree(null);
+		return deleteNode;
+	}
 
 }
 
