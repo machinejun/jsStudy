@@ -53,16 +53,17 @@ class BinarySearchTree {
 
 	remove(targetData) {
 		let fakeParentNode = new BinaryTree(0); 
-		//루트 노드를 제거할 때 사용
-		// why ? 루트노드는 다른 노드와 다르게 부모 노드를 가지고 있지 않음
+		// 루트 노드를 제거할 때 사용
+		// 루트 노드를 제외한 모든 노드는 부모 노드를 가짐 -> 부모 노드를 가지고 연결
+		// 루트 부모 노드는 부모가 없어 제거를 진행 할 수 없다. --> 임시로 루트 노드의 부모를 만들어 준다.(사용하지 않는 노드라서 value=0)
 
 		let parentNode = fakeParentNode; //루트노드부터 시작한다
 		let currentNode = this._root;
-		let deleteNode = null;
+		let deleteNode = null; // 제거할 노드
 
-		fakeParentNode.setRightSubTree(this._root);
+		fakeParentNode.setRightSubTree(this._root); // 루트의 임시 부모로 설정
 
-		while(currentNode != null && currentNode.getData() != targetData) {
+		while(currentNode != null && currentNode.getData() != targetData) { // 노드 찾기
 			parentNode = currentNode;
 			if(currentNode.getDatat() > targetData) {
 				currentNode = currentNode.getLeftSubTree();
@@ -73,6 +74,7 @@ class BinarySearchTree {
 
 		if(currentNode == null) return; // 데이터를 찾지 못하였을 때
 
+		// currentNode는 제거할 데이터
 		deleteNode = currentNode;
 
 		if(deleteNode.getLeftSubTree() == null && deleteNode.getRightSubTree() == null) { //1. 자식노드가 하나도 없는 터미널 노드일 때
@@ -80,7 +82,7 @@ class BinarySearchTree {
 			else parentNode.removeRightSubTree();
 		}
 		else if(deleteNode.getLeftSubTree() == null || deleteNode.getRightSubTree() == null) { //2. 자식 노드가 하나인 노드 제거
-			let deleteNodeChild = null;
+			let deleteNodeChild = null; // 제거할 노드의 자식노드 임시 저장
 
 			if(deleteNode.getLeftSubTree() != null) {
 				deleteNodeChild = deleteNode.getLeftSubTree();
@@ -88,14 +90,14 @@ class BinarySearchTree {
 				deleteNodeChild = deleteNode.getRightSubTree();
 			}
 
-			if(parentNode.getLeftSubTree() == deleteNode) parentNode.setLeftSubTree(deleteNodeChild);
+			if(parentNode.getLeftSubTree() == deleteNode) parentNode.setLeftSubTree(deleteNodeChild); // 제거할 노드와 자식 노드 교체
 			else parentNode.setRightSubTree(deleteNodeChild);
 		
 		}
-		//3. 자식 노드가 두개인 노드 제거 
+		//3. 자식 노드가 두개인 노드 제거 --> 제거시 왼쪽 자식 노드에서 가장 큰값을 찾아 제거된 노드 위치로
 		else {
-			let replaceNode = deleteNode.getLeftSubTree();
-			let replaceParent = deleteNode;
+			let replaceNode = deleteNode.getLeftSubTree(); // 큰값을 찾을 노드
+			let replaceParent = deleteNode; // 큰값의 부모
 
 
 			while(replaceNode.getRightSubTree() != null) { // 왼쪽 자식 트리중 가장 큰 값을 가진 노드 찾기
@@ -103,22 +105,25 @@ class BinarySearchTree {
 				replaceNode = replaceNode.getRightSubTree();
 			}
 
-			let deleteNodeData = deleteNode.getData();
-			deleteNodeData.setData(replaceNode.getData());
+			let deleteNodeData = deleteNode.getData(); // 제거할 노드의 값
+			deleteNodeData.setData(replaceNode.getData()); // 대체할 노드의 값
 
-			if(replaceParent.getLeftSubTree() == replaceNode){ // 우리는 오른쪽 자식 노드가 없다는 것을 알고 있기 때문에 왼쪽 자식만 신경쓰면 된다.
-				replaceParent.setLeftSubTree(replaceNode.getLeftSubTree());
+			// 대체할 노드의 자식 노드를 대체할 노드의 부모의 자식 노드로 대체
+			if(replaceParent.getLeftSubTree() == replaceNode){ 
+				// 부모 노드의 왼쪽 자식 노드가 대체할 노드라면
+				replaceParent.setLeftSubTree(replaceNode.getLeftSubTree()); // 왼쪽 자식노드를 대체할 노드의 왼쪽 자식노드로 대체   
 			}else {
-				replaceParent.setRightSubTree(replaceNode.getLeftSubTree());
+				replaceParent.setRightSubTree(replaceNode.getLeftSubTree());// 오른쪽 자식노드를 대체할 노드의 왼쪽 자식노드로 대체
 			}
+			// 여기서 왼쪽노드만 대체 -> why ? 대체할 노드가 해당 왼쪽 트리에서 가장 큰값이기 때문에 오른쪽 자식 노드가 존재할수 없다.
 
 			deleteNode = replaceNode;
 			deleteNode.setData(deleteNodeData);
 		
 		}
 
-		if(fakeParentNode.getRightSubTree() != this.root) {
-			this.root = fakeParentNode.getRightSubTree();
+		if(fakeParentNode.getRightSubTree() != this.root) { // 루트 노드를 제거할 경우
+			this.root = fakeParentNode.getRightSubTree(); 
 		}
 
 		return deleteNode;
