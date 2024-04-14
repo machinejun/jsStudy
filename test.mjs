@@ -1,4 +1,4 @@
-import {HashSet} from './HashSet.mjs';
+import {HashSet} from './선형알고리즘/HashSet.mjs';
 
 let hashSet = new HashSet();
 
@@ -26,4 +26,6 @@ console.log("clear : " + hashSet.isEmpty(s));
 hashSet.printAll();
 
 console.log("test");
+
+
 

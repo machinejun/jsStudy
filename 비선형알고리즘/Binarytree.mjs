@@ -71,12 +71,14 @@ class BinaryTree {
         console.log(tree.getData());
     }
 
+    // 왼쪽 자식 노드를 제거
 	removeLeftSubTree() {
 		let deleteNode = this.getLeftSubTree();
 		this.setLeftSubTree(null);
 		return deleteNode;
 	}
 
+    // 오른쪽자식 노드를 제거   
 	removeRightSubTree() {
 		let deleteNode = this.getRightSubTree();
 		this.setRightSubTree(null);
